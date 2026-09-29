@@ -23,8 +23,11 @@ class Employee:
 
     def getId(self):
         return self.id
-    def getfullName(self):
+    def getFullName(self):
         return self.fullName
+    def getBaseSalary(Self):
+        return Self.baseSalary
+    
     def calculateMonthlyCost(self):
         return self.baseSalary
     def displayInfo(self):
@@ -32,13 +35,28 @@ class Employee:
         print(f"Full name: {self.fullName}")
         print(f"Base salary: {self.baseSalary}")       
 
+    def __del__(self):
+        print(f"Employee {self.id} đã bị xóa")
+
+
 class SoftwareEngineer(Employee): # Kế thừa từ employee
     def __init__(self, id="UNKNOWN", fullName="Unnamed employee", baseSalary=0, primaryLanguage = "UNKNOWN" , technicalAllowance = 0):
         super().__init__(id, fullName, baseSalary) #Kế thừa thuộc tính đã có từ employee
+        if primaryLanguage == "":
+            raise ValueError("primaryLanguage không rỗng")
+        if technicalAllowance < 0:
+            raise ValueError("technicalAllowance không âm")
         self.primaryLanguage = primaryLanguage
         self.technicalAllowance = technicalAllowance
 
+    #ghi đè 2 hàm:
     def calculateMonthlyCost(self):
         return self.baseSalary + self.technicalAllowance
     def displayInfo(self):
-        pass
+        print(f"ID: {self.id}")
+        print(f"Full name: {self.fullName}")
+        print(f"Base salary: {self.baseSalary}")      
+        print(f"Primary language: {self.primaryLanguage}")
+        print(f"Technical Allowance: {self.technicalAllowance}")
+
+    

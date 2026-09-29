@@ -127,3 +127,69 @@ class ProjectTeam:
         print(f"ProjectTeam {self.projectCode} đã bị xóa")
         self.members.clear()
         self.leader = None
+
+ 
+def main():
+    print("1. Tạo hai Employee")
+    e1 = Employee("E01", "Nguyễn Văn An")
+    e2 = Employee("E02", "Trần Thị Bình", 15000000)
+    e1.displayInfo()
+    e2.displayInfo()
+ 
+    print("\n2. Tạo hai SoftwareEngineer")
+    se1 = SoftwareEngineer("SE01", "Lê Minh Cường", "Python")
+    se2 = SoftwareEngineer("SE02", "Phạm Thu Dung", 25000000, "C#", 5000000)
+    se1.displayInfo()
+    se2.displayInfo()
+ 
+    print("\n3. Tăng lương cố định")
+    e2.increaseSalary(2000000)
+    e2.displayInfo()
+ 
+    print("\n4. Tăng lương theo phần trăm")
+    se2.increaseSalary(10, True)
+    se2.displayInfo()
+ 
+    print("\n5. Tạo nhóm chưa có trưởng nhóm")
+    team1 = ProjectTeam("P01", "Ứng dụng quản lý thư viện")
+    team1.displayTeam()
+ 
+    print("\n6. Thêm nhân sự")
+    print(team1.addMember(e2))
+ 
+    print("\n7. Thêm kỹ sư làm trưởng nhóm")
+    print(team1.addMember(se2, True))
+ 
+    print("\n8. Thêm lại thành viên đã có")
+    print(team1.addMember(e2))
+ 
+    print("\n9. Hiển thị danh sách")
+    team1.displayTeam()
+ 
+    print("\n10. Tổng chi phí hằng tháng")
+    print(team1.calculateTotalMonthlyCost())
+ 
+    print("\n11. Xóa trưởng nhóm")
+    print(team1.removeMember("SE02"))
+ 
+    print("\n12. Đổi trưởng nhóm rồi xóa trưởng nhóm cũ")
+    team1.changeLeader(e2)
+    print(team1.removeMember("SE02"))
+    team1.displayTeam()
+ 
+    print("\n13. Tạo nhóm thứ hai")
+    team2 = ProjectTeam("P02", "Hệ thống chấm công", se1)
+    team2.addMember(e2)             # e2 đã có ở nhóm 1 -> 1 người thuộc 2 nhóm
+    team2.displayTeam()
+
+    print("\n14. Hủy nhóm thứ hai")
+    del team2                       # Xóa biến team2 -> nhóm bị hủy, __del__ chạy ngay
+ 
+    print("\n15. Nhân sự vẫn tồn tại sau khi nhóm bị hủy")
+    e2.displayInfo()
+    se1.displayInfo()
+ 
+    print("\nKết thúc chương trình")
+ 
+ 
+main()

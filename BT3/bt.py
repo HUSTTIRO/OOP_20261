@@ -25,8 +25,8 @@ class Employee:
         return self.id
     def getFullName(self):
         return self.fullName
-    def getBaseSalary(Self):
-        return Self.baseSalary
+    def getBaseSalary(self):
+        return self.baseSalary
     
     def calculateMonthlyCost(self):
         return self.baseSalary
@@ -39,16 +39,22 @@ class Employee:
         print(f"Employee {self.id} đã bị xóa")
 
 
-class SoftwareEngineer(Employee): # Kế thừa từ employee
-    def __init__(self, id="UNKNOWN", fullName="Unnamed employee", baseSalary=0, primaryLanguage = "UNKNOWN" , technicalAllowance = 0):
-        super().__init__(id, fullName, baseSalary) #Kế thừa thuộc tính đã có từ employee
+class SoftwareEngineer(Employee):
+    #Dùng *args để gom các tham số sau fullName vào 1 tuple, rồi đếm số lượng
+    def __init__(self, id, fullName, *args):
+        if len(args) == 1:
+            baseSalary = 0
+            primaryLanguage = args[0]
+            technicalAllowance = 0
+        else:
+            baseSalary, primaryLanguage, technicalAllowance = args
         if primaryLanguage == "":
             raise ValueError("primaryLanguage không rỗng")
         if technicalAllowance < 0:
             raise ValueError("technicalAllowance không âm")
+        super().__init__(id, fullName, baseSalary)
         self.primaryLanguage = primaryLanguage
         self.technicalAllowance = technicalAllowance
-
     #ghi đè 2 hàm:
     def calculateMonthlyCost(self):
         return self.baseSalary + self.technicalAllowance
@@ -58,5 +64,66 @@ class SoftwareEngineer(Employee): # Kế thừa từ employee
         print(f"Base salary: {self.baseSalary}")      
         print(f"Primary language: {self.primaryLanguage}")
         print(f"Technical Allowance: {self.technicalAllowance}")
+    def __del__(self):
+        print(f"SoftwareEngineer {self.id} đã bị xóa")
+        super().__del__()
 
-    
+
+class ProjectTeam:
+    def __init__(self, projectCode, projectName, leader=None):
+        self.projectCode = projectCode
+        self.projectName = projectName
+        self.leader = None
+        self.members = []
+        if leader is not None:
+            self.addMember(leader, True)
+ 
+    def contains(self, employeeId):
+        for m in self.members:
+            if m.getId() == employeeId:
+                return True
+        return False
+ 
+    def addMember(self, employee, makeLeader=False):
+        if self.contains(employee.getId()):
+            print(f"{employee.getId()} đã có trong nhóm")
+            return False
+        self.members.append(employee)
+        if makeLeader:
+            self.leader = employee
+        return True
+    def removeMember(self, employeeId):
+        if self.leader is not None and self.leader.getId() == employeeId:
+            print("Không thể xóa trưởng nhóm")
+            return False
+        for m in self.members:
+            if m.getId() == employeeId:
+                self.members.remove(m)
+                return True
+        print("Không tìm thấy nhân sự")
+        return False
+ 
+    def changeLeader(self, employee):
+        if not self.contains(employee.getId()):
+            self.members.append(employee)
+        self.leader = employee
+ 
+    def calculateTotalMonthlyCost(self):
+        total = 0
+        for m in self.members:
+            total += m.calculateMonthlyCost()
+        return total
+ 
+    def displayTeam(self):
+        print(f"Nhóm {self.projectCode} - {self.projectName}")
+        if self.leader is not None:
+            print(f"Trưởng nhóm: {self.leader.getFullName()}")
+        else:
+            print("Trưởng nhóm: chưa có")
+        for m in self.members:
+            m.displayInfo()
+ 
+    def __del__(self):
+        print(f"ProjectTeam {self.projectCode} đã bị xóa")
+        self.members.clear()
+        self.leader = None

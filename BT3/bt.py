@@ -190,6 +190,4 @@ def main():
     se1.displayInfo()
  
     print("\nKết thúc chương trình")
- 
- 
 main()
